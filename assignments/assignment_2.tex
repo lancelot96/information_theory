@@ -1,0 +1,121 @@
+\documentclass{ctexart}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{信息论作业 2}
+\author{史泽宇}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{题目 1}
+
+这里令 $X_1$ 表示第一颗骰子的结果，$X_2$ 表示第二颗骰子的结果，$X_3$ 表示第三颗骰子的结果，所以 $X = X_1, Y = X_1 + X_2, Z = X_1 + X_2 + X_3$。
+
+\begin{align}
+    H(X) &= H(X_1) = H(X_2) = H(X_3) \\
+    &= \sum_1^6 \frac{1}{6}\log_2 6 \\
+    &= \log_2 6 bits \\
+    &\approx 2.5850 bits \\
+    \\
+    H(Y) &= H(X_1 + X_2) = H(X_2 + X_3) = H(X_1 + X_3) \\
+    &= \sum_p^\Omega p\log_2 \frac{1}{p} \\
+    &\approx 3.2744 bits \\
+    \Omega &= \{\frac{1}{36}, \frac{2}{36}, \frac{3}{36}, \frac{4}{36}, \frac{5}{36}, \frac{6}{36}, \frac{5}{36}, \frac{4}{36}, \frac{3}{36}, \frac{2}{36}, \frac{1}{36}\} \\
+    \\
+    H(Z) &= H(X_1 + X_2 + X_3) \\
+    &= \sum_p^\Omega p\log_2 \frac{1}{p} \\
+    &\approx 3.5993 bits \\
+    \Omega &= \{\frac{1}{216}, \frac{3}{216}, \frac{6}{216}, \frac{10}{216}, \frac{15}{216}, \frac{21}{216}, \frac{25}{216}, \frac{27}{216}, \frac{27}{216}, \frac{25}{216}, \frac{21}{216}, \frac{15}{216}, \frac{10}{216}, \frac{6}{216}, \frac{3}{216}, \frac{1}{216}\}
+\end{align}
+
+\begin{enumerate}
+    \item\begin{align}
+        I(Y; Z) &= H(Z) - H(Z|Y) \\
+        &= H(Z) - H(X) \\
+        &\approx 1.0143 bits
+    \end{align}
+    \item\begin{align}
+        I(X; Z) &= H(Z) - H(Z|X) \\
+        &= H(Z) - H(Y) \\
+        &\approx 0.3249 bit
+    \end{align}
+    \item\begin{align}
+        I(X, Y; Z) &= I(X; Z) + I(Y; Z|X) \\
+        &= H(Z) - H(Y) + H(Z|X) - H(Z|X, Y) \\
+        &= H(Z) - H(Y) + H(Y) - H(X) \\
+        &= H(Z) - H(X) \\
+        &\approx 1.0143 bits
+    \end{align}
+    \item\begin{align}
+        I(Y; Z|X) &= H(Y) - H(X) \\
+        &\approx 0.6894 bit
+    \end{align}
+    \item\begin{align}
+        I(X; Z|Y) &= H(Z|Y) - H(Z|X, Y) \\
+        &= H(X) - H(X) \\
+        &= 0 bit
+    \end{align}
+\end{enumerate}
+
+\paragraph{题目 2}
+
+这道题目似乎没有说明发送数字的先验概率分布，这里假设发送概率分布为均匀分布。设输入概率空间为 $X$，输出概率空间为 $Y$。
+
+\begin{align}
+    I(X; Y) &= \sum_x\sum_y P(x, y)\log_2\frac{P(x|y)}{P(x)} \\
+    &= \sum_{x \in even(X)}\sum_y P(x, y)\log_2\frac{P(x|y)}{P(x)} + \sum_{x \in odd(X)}\sum_{y \in odd(Y)} P(x, y)\log_2\frac{P(x|y)}{P(x)} \\
+    &= \frac{1}{10}\sum_{x \in even(X)} \log_2\frac{1}{P(x)} + \sum_{x \in odd(X)}\sum_{y \in odd(Y)} P(x, y)\log_2\frac{P(x|y)}{P(x)} \\
+    &= \frac{1}{2}\log_2 10 + \sum_{x \in odd(X)} P(x, x)\log_2\frac{P(x|x)}{P(x)} + \sum_{x \in odd(X)}\sum_{y \in odd(Y \setminus x)} P(x, y)\log_2\frac{P(x|y)}{P(x)} \\
+    &= \frac{1}{2}\log_2 10 + \frac{5}{20}\log_2 5 + \sum_{x \in odd(X)}\sum_{y \in odd(Y \setminus x)} P(x, y)\log_2\frac{P(x|y)}{P(x)} \\
+    &= \frac{1}{2}\log_2 10 + \frac{5}{20}\log_2 5 + \frac{20}{80}\log_2 \frac{10}{8} \\
+    &= \frac{1}{2}\log_2 10 + \frac{1}{4}\log_2 \frac{25}{4} \\
+    &\approx 2.3219 bits
+\end{align}
+
+那么问题来了，题目中要求计算“收到一个数字平均得到的信息量”，我不知道应该计算
+$$I(X; Y), H(X, Y), H(X|Y), H(Y|X), H(X), H(Y)$$
+中的哪一个。我这里的问题是不知道如何分析题目，来计算题目所要求的内容。以本题为例的话，就是题目中哪里透露了需要计算互信息而不是其他数据，请老师答疑解惑。
+
+\paragraph{题目 3}
+
+\begin{enumerate}
+    \item 由下两小问的结果可得\begin{align}
+        H(Y, Z|X) &= H(Y|X) + H(Z|X, Y) \\
+        &= H(Y|X) + H(Z|X) - I(Y; Z|X) \\
+        &\le H(Y|X) + H(Z|X)
+    \end{align}在 $X$ 给定的条件下 $Y, Z$ 相互独立时，等号成立。
+    \item\begin{align}
+        H(Y, Z|X) &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2 P(y, z|x) \\
+        &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2(P(y|x)P(z|x, y)) \\
+        &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2 P(y|x) -\sum_x\sum_y\sum_z P(x, y, z) \log_2 P(z|x, y) \\
+        &= -\sum_x\sum_y P(x, y) \log_2 P(y|x) -\sum_x\sum_y\sum_z P(x, y, z) \log_2 P(z|x, y) \\
+        &= H(Y|X) + H(Z|X, Y)
+    \end{align}
+    \item 由互信息不等式可得\begin{align}
+        H(Z|X, Y) &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2 P(z|x, y) \\
+        &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2(P(z|x, y)\frac{P(z|x)}{P(z|x)}) \\
+        &= -\sum_x\sum_y\sum_z P(x, y, z)\log_2P(z|x) -\sum_x\sum_y\sum_z P(x, y, z)\frac{P(z|x, y)}{P(z|x)} \\
+        &= -\sum_x\sum_z P(x, z)\log_2P(z|x) -\sum_x\sum_y\sum_z P(x, y, z)\frac{P(z|x, y)}{P(z|x)} \\
+        &= H(Z|X) - I(Y; Z|X) \\
+        &\le H(Z|X)
+    \end{align}
+\end{enumerate}
+
+\paragraph{题目 4}
+
+由凸函数的定义与对数和不等式可得
+
+\begin{align}
+    D(\lambda p_1 + (1 - \lambda)p_2 || \lambda q_1 + (1 - \lambda)q_2)
+    &= \sum_x (\lambda p_1(x) + (1 - \lambda)p_2(x)) \log_2 \frac{\lambda p_1(x) + (1 - \lambda)p_2(x)}{\lambda q_1(x) + (1 - \lambda)q_2(x)} \\
+    &\le \sum_x (\lambda p_1(x) \log_2 \frac{\lambda p_1(x)}{\lambda q_1(x)} + (1 - \lambda)p_2(x) \log_2 \frac{(1 - \lambda)p_2(x)}{(1 - \lambda)q_2(x)}) \\
+    &= \lambda D(p_1 || q_1) + (1 - \lambda)D(p_2 || q_2)
+\end{align}
+
+\end{document}

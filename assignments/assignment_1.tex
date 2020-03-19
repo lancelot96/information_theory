@@ -1,0 +1,127 @@
+\documentclass{ctexart}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\newtheorem{cl}{Corollary}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{信息论作业 1}
+\author{史泽宇}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{题目 1}
+\begin{enumerate}
+    \item 两枚骰子总点数之和为 7 的情况有 $\{(1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1)\}$ 6 种情况，总共可能产生 $6 \times 6 = 36$ 种情况。所以投掷总点数之和为 7 的概率为 $\frac{3}{18}$，其自信息为 $\log_2\frac{18}{3} \approx 2.58 bits$。
+    \item 两枚骰子总点数之和为 12 的情况有 $\{(1, 1)\}$ 1 种情况。所以投掷总点数之和为 12 的概率为 $\frac{1}{36}$，其自信息为 $\log_2 36 \approx 5.17 bits$。
+\end{enumerate}
+
+\paragraph{题目 2}
+本题目如果直接计算多个离散概率的互信息，脑补了一下计算复杂度，可能会比较高，查阅了部分资料后\cite{madiman2008entropy}，得到如下结论（论文上说 Elements of Information Theory 上面有，但是我没找到）：
+
+\begin{cl}
+Let $Y = X_1 + X_2$, where $X_1$ and $X_2$ are independent, then $I(X_1; Y) = H(Y) - H(X_2)$
+\end{cl}
+
+\begin{align}
+    I(X_1; X_1 + X_2) &= H(X_1 + X_2) - H(X_1 + X_2|X_1) \\
+    &= H(X_1 + X_2) - H(X_2|X_1) \\
+    &= H(X_1 + X_2) - H(X_2) \\
+    &= H(Y) - H(X_2)
+\end{align}
+
+其中 (1) 到 (2) 的步骤不是很明白，想请老师答疑解惑一下。本题目的解答中很大程度上依靠了 (1) 到 (2) 化简方法。这里令 $X_1$ 表示第一颗骰子的结果，$X_2$ 表示第二颗骰子的结果，$X_3$ 表示第三颗骰子的结果，所以 $X = X_1, Y = X_1 + X_2, Z = X_1 + X_2 + X_3$。
+
+\begin{align}
+    H(X) &= H(X_1) = H(X_2) = H(X_3) \\
+    &= \sum_1^6 \frac{1}{6}\log_2 6 \\
+    &= \log_2 6 bits \\
+    &\approx 2.5850 bits
+\end{align}
+
+\begin{align}
+    H(Y) &= H(X_1 + X_2) = H(X_2 + X_3) = H(X_1 + X_3) \\
+    &= \sum_p^\Omega p\log_2 \frac{1}{p} \\
+    &\approx 3.2744 bits \\
+    \Omega &= \{\frac{1}{36}, \frac{2}{36}, \frac{3}{36}, \frac{4}{36}, \frac{5}{36}, \frac{6}{36}, \frac{5}{36}, \frac{4}{36}, \frac{3}{36}, \frac{2}{36}, \frac{1}{36}\} 
+\end{align}
+
+\begin{enumerate}
+    \item\begin{align}
+        H(Z|Y) &= H(X_1 + X_2 + X_3|X_1 + X_2) \\
+        &= H(X_3|X_1 + X_2) \\
+        &= H(X_3) \\
+        &\approx 2.5850 bits
+    \end{align}
+    \item\begin{align}
+        H(X|Y) &= H(X_1|X_1 + X_2) \\
+        &= H(X_1) - I(X_1; X_1 + X_2) \\
+        &= H(X_1) - H(X_1 + X_2) + H(X_2) \\
+        &\approx 1.8955 bits
+    \end{align}
+    \item\begin{align}
+        H(Z|X, Y) &= H(X_1 + X_2 + X_3|X_1, X_1 + X_2) \\
+        &= H(X_3|X_1, X_1 + X_2) \\
+        &= H(X_3) \\
+        &\approx 2.5850 bits
+    \end{align}
+    \item\begin{align}
+        H(X, Z|Y) &= H(X|Y) + H(Z|X, Y) \\
+        &\approx 4.4805 bits
+    \end{align}
+    \item\begin{align}
+        H(Z|X) &= H(X_1 + X_2 + X_3|X_1) \\
+        &= H(X_2 + X_3|X_1) \\
+        &= H(X_2 + X_3) \\
+        &\approx 3.2744 bits
+    \end{align}
+\end{enumerate}
+
+\paragraph{题目 3} 
+
+\begin{enumerate}
+    \item\begin{align}
+        P(0) &= \sum_{i=1}^8 P(u_i)P(0|u_i) \\
+        &= \frac{4(1 - p)}{8} + \frac{4p}{8} \\
+        &= \frac{1}{2} \\
+        P(u_1|0) &= \frac{P(u_1)P(0|u_1)}{P(0)} \\
+        &= \frac{\frac{1}{8}(1 - p)}{\frac{1}{2}} \\
+        &= \frac{1 - p}{4} \\
+        I(u_1; 0) &= \log_2 \frac{P(u_1|0)}{P(u_1)} \\
+        &= \log_2 \frac{\frac{1 - p}{4}}{\frac{1}{8}} \\
+        &= 1 + \log_2 (1 - p) bits
+    \end{align}
+    \item\begin{align}
+        P(00) &= \sum_{i=1}^8 P(u_i)P(00|u_i) \\
+        &= \frac{1}{4} \\
+        P(u_1|00) &= \frac{P(u_1)P(00|u_1)}{P(00)} \\
+        &= \frac{{1 - p}^2}{2} \\
+        I(u_1; 00) &= \log_2 \frac{P(u_1|00)}{P(u_1)} \\
+        &= 2 + 2\log_2 (1 - p) bits
+    \end{align}
+    \item\begin{align}
+        P(000) &= \sum_{i=1}^8 P(u_i)P(000|u_i) \\
+        &= \frac{1}{8} \\
+        P(u_1|000) &= \frac{P(u_1)P(000|u_1)}{P(000)} \\
+        &= (1 - p)^3 \\
+        I(u_1; 000) &= \log_2 \frac{P(u_1|000)}{P(u_1)} \\
+        &= 3 + 3\log_2 (1 - p) bits
+    \end{align}
+    \item\begin{align}
+        P(0000) &= \sum_{i=1}^8 P(u_i)P(0000|u_i) \\
+        &= \frac{(1 - p)^4 + p^4 + 6(1 - p)^2p^2}{8} \\
+        P(u_1|0000) &= \frac{P(u_1)P(0000|u_1)}{P(0000)} \\
+        &= \frac{(1 - p)^4}{(1 - p)^4 + p^4 + 6(1 - p)^2p^2} \\
+        I(u_1; 0000) &= \log_2 \frac{P(u_1|0000)}{P(u_1)} \\
+        &= \log_2 \frac{8(1 - p)^4}{(1 - p)^4 + p^4 + 6(1 - p)^2p^2} bits
+    \end{align}
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{assignment_1} 
+
+\end{document}

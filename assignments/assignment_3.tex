@@ -1,0 +1,138 @@
+\documentclass{ctexart}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\title{信息论作业 3}
+\author{史泽宇}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{题目 1}
+
+\begin{enumerate}
+    \item\begin{align}
+        P(Y|x=1) &= \begin{cases}
+            \frac{1}{4} & -1 < y \le 3 \\
+            0 &
+        \end{cases} \\
+        P(Y|x=-1) &= \begin{cases}
+            \frac{1}{4} & -3 < y \le 1 \\
+            0 &
+        \end{cases} \\
+        \omega(Y) &= \sum_x P(x)P(Y|x) \\
+        &= \begin{cases}
+            \frac{1}{8} & -3 < y \le -1 \\
+            \frac{1}{4} & -1 < y \le 1 \\
+            \frac{1}{8} & 1 < y \le 3 \\
+            0 &
+        \end{cases}
+    \end{align}
+    \item\begin{align}
+        I(X; Y) &= H_c(Y) - H_c(Y|X) \\
+        &= -\int_y P(y)\log_2 P(y)dy + \int_{-2}^2 P(x)P(y|x)\log_2 P(y|x)dy \\
+        &= -2\int_1^3\frac{1}{8}\log_2\frac{1}{8}dy - \int_{-1}^1\frac{1}{4}\log_2\frac{1}{4} + \int_{-2}^2\sum_x P(x)P(y|x)\log_2 P(y|x)dy \\
+        &= \frac{12}{8} + 1 + \int_{-2}^2 \frac{1}{4}\log_2\frac{1}{4}dy \\
+        &= 0.5 bit
+    \end{align}
+    \item\begin{align}
+        P(V) &= \begin{cases}
+            \frac{1}{4} & y \le -1 \\
+            \frac{1}{2} & -1 < y \le 1 \\
+            \frac{1}{4} & y > 1
+        \end{cases} \\
+        P(V|x=1) &= \begin{cases}
+            0 & y \le -1 \\
+            \frac{1}{2} & -1 < y \le 1 \\
+            \frac{1}{2} & y > 1
+        \end{cases} \\
+        P(V|x=-1) &= \begin{cases}
+            \frac{1}{2} & y \le -1 \\
+            \frac{1}{2} & -1 < y \le 1 \\
+            0 & y > 1
+        \end{cases} \\
+        I(X; V) &= H(V) - H(V|X) \\
+        &= -\sum_v P(v)\log_2 P(v) + \sum_x\sum_v P(x, v)\log_2 P(v|x) \\
+        &= 1.5 + \log_2\frac{1}{2} \\
+        &= 0.5 bit
+    \end{align}
+    由于 $P(V)$ 是 $\omega(Y)$ 的积分，所以两者信息量相同。或者由数据处理不等式，$I(X|Y) \ge I(X|V)$，而 $P(V)$ 与 $\omega(Y)$ 互为可逆函数，所以等号成立，两者信息量相同。
+\end{enumerate}
+
+\paragraph{题目 2}
+
+\begin{enumerate}
+    \item\begin{align}
+        & \lceil\log_2 (C_{100}^0 + C_{100}^1 + C_{100}^2)\rceil \\
+        =& \lceil\log_2 (1 + 100 + 4950)\rceil \\
+        =& 13
+    \end{align}
+    \item\begin{align}
+        P_e &= 1 - C_{100}^0 P(a_2)^{100} - C_{100}^1 P(a_1)P(a_2)^{99} - C_{100}^2 P(a_1)^2P(a_2)^{98} \\
+        &\approx 0.00775
+    \end{align}
+\end{enumerate}
+
+\paragraph{题目 3}
+
+\begin{align}
+    H(U) &= -\sum_u P(u)\log_2 P(u) \\
+    &= \frac{1}{4}\log_2 4 + \frac{3}{4}\log_2 \frac{4}{3} \\
+    &\approx 0.81128 bit
+    \\
+    \sigma^2 &= \sum_u P(u)(I(u) - H(U))^2 \\
+    &= \frac{1}{4}(\log_2 4 - H(U))^2 + \frac{3}{4}(\log_2\frac{4}{3} - H(U))^2 \\
+    &\approx 0.47102 bit
+\end{align}
+
+\begin{enumerate}
+    \item 由切比雪夫不等式可得
+    \begin{align}
+        L &\ge \frac{\sigma^2}{\varepsilon\delta^2} \\
+        &\approx 1884.08 \\
+        L_0 &= \lceil L\rceil \\
+        &= 1885
+    \end{align}
+    \item 由切比雪夫不等式可得
+    \begin{align}
+        L &\ge \frac{\sigma^2}{\varepsilon\delta^2} \\
+        &\approx 47101989912979.88 \\
+        L_0 &= \lceil L\rceil \\
+        &= 47101989912980
+    \end{align}
+    \item\begin{enumerate}
+        \item $\delta = 0.05, \varepsilon = 0.1, L_0 = 1885$
+        \begin{align}
+            upper\_bound &= \lfloor 2^{L_0(H(U) + \delta)}\rfloor \\
+            &= \lfloor 2^{1623.51}\rfloor \\
+            lower\_bound &= \lceil (1 - \varepsilon)2^{L_0(H(U) - \delta)}\rceil \\
+            &= \lceil 0.9 \times 2^{1435.01}\rceil
+        \end{align}
+        \item $\delta = 10^{-3}, \varepsilon = 10^{-8}, L_0 = 47101989912980$
+        \begin{align}
+            upper\_bound &= \lfloor 2^{L_0(H(U) + \delta)}\rfloor \\
+            &= \lfloor 2^{38259916024808.39}\rfloor \\
+            lower\_bound &= \lceil (1 - \varepsilon)2^{L_0(H(U) - \delta)}\rceil \\
+            &= \lceil 0.99999999 \times 2^{38165712044982.43}\rceil
+        \end{align}
+    \end{enumerate}
+\end{enumerate}
+
+话说在看书的时候遇到一个问题，关于切比雪夫不等式的使用。首先列出切比雪夫不等式，对于随机变量 $X$，数学期望 $E(X)$，方差 $DX$：
+
+\begin{equation}
+    P[|X - E(X)| \ge \varepsilon] \le \frac{D(X)^2}{\varepsilon^2}
+\end{equation}
+
+在书上公式 (3.2.10) 中，$\frac{I(\textbf{u}_L)}{L}$ 表示平均单个字母的自信息，为什么 $\frac{\sigma_I^2}{L\varepsilon^2}$ 比标准的切比雪夫不等式增加了变量 $L$：
+
+\begin{equation}
+    P_r[|\frac{I(\textbf{u}_L)}{L} - H(U)| > \varepsilon] < \frac{\sigma_I^2}{L\varepsilon^2} = \delta
+\end{equation}
+
+\end{document}
