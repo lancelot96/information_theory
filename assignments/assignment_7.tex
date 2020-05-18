@@ -1,0 +1,154 @@
+\documentclass{ctexart}
+
+\usepackage{color}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage[colorlinks]{hyperref}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\title{信息论作业 7}
+\author{史泽宇}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{题目 1}
+
+\begin{enumerate}
+    \item 由于消息数量为 4，所以我们使用 5-2 码（校验位在右）。假设线性分组码的一致校验矩阵为
+    \begin{equation}
+        H = \begin{bmatrix}
+            P_{00} & P_{01} & 1 & 0 & 0 \\
+            P_{10} & P_{11} & 0 & 1 & 0 \\
+            P_{20} & P_{21} & 0 & 0 & 1 \\
+        \end{bmatrix}
+    \end{equation}
+    由 $HC^\mathrm{T} = 0$ 可得
+    \begin{align}
+        \begin{bmatrix}
+            P_{00} & P_{01} & 1 & 0 & 0 \\
+            P_{10} & P_{11} & 0 & 1 & 0 \\
+            P_{20} & P_{21} & 0 & 0 & 1 \\
+        \end{bmatrix}
+        \cdot
+        \begin{bmatrix}
+            0 & 0 & 1 & 1 \\
+            0 & 1 & 0 & 1 \\
+            0 & 1 & 1 & 0 \\
+            0 & 0 & 1 & 1 \\
+            0 & 1 & 1 & 0 \\
+        \end{bmatrix}
+        % &=
+        % \begin{bmatrix}
+        %     0 & P_{01} + 1 & P_{00} + 1 & P_{00} + P_{01} \\
+        %     0 & P_{11} & P_{10} + 1 & P_{10} + P_{11} + 1 \\
+        %     0 & P_{21} + 1 & P_{20} + 1 & P_{20} + P_{21} \\
+        % \end{bmatrix} \\
+        &=
+        \begin{bmatrix}
+            0 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+        \end{bmatrix}
+    \end{align}
+    所以 $H$ 为
+    \begin{equation}
+        H = \begin{bmatrix}
+            1 & 1 & 1 & 0 & 0 \\
+            1 & 0 & 0 & 1 & 0 \\
+            1 & 1 & 0 & 0 & 1 \\
+        \end{bmatrix}
+        \qquad
+        H^\mathrm{T} = \begin{bmatrix}
+            1 & 1 & 1 \\
+            1 & 0 & 1 \\
+            1 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 1 \\
+        \end{bmatrix}
+    \end{equation}
+    \item 根据最小距离译码原则，伴随式与错误图样的对应关系如下
+    \begin{table}[H]
+        \centering
+        \caption{最佳译码表}
+        \begin{tabular}{c|cccccccc}
+            \hline
+            伴随式 & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\
+            错误图样 & 00000 & 00001 & 00010 & 00011 & 00100 & 01000 & 10001 & 10000 \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \item 由重量分布矢量 $A = \begin{pmatrix}
+        1 & 5 & 2 & 0 & 0 \\
+    \end{pmatrix}$ 可得译码错误概率为 $P_e = 1 - (1 - p)^5 - 5p(1 - p)^4 - 2p^2(1 - p)3$
+\end{enumerate}
+
+\paragraph{题目 2}
+
+\begin{enumerate}
+    \item\begin{equation}
+        H = \begin{bmatrix}
+            0 & 0 & 1 & 1 & 0 & 0 \\
+            1 & 0 & 1 & 0 & 1 & 0 \\
+            1 & 1 & 0 & 0 & 0 & 1 \\
+        \end{bmatrix}
+        % \qquad
+        % H^\mathrm{T} = \begin{bmatrix}
+        %     0 & 1 & 1 \\
+        %     0 & 0 & 1 \\
+        %     1 & 1 & 0 \\
+        %     1 & 0 & 0 \\
+        %     0 & 1 & 0 \\
+        %     0 & 0 & 1 \\
+        % \end{bmatrix}
+    \end{equation}
+    \item 根据生成矩阵计算可能的码字为
+    \begin{table}[H]
+        \centering
+        \caption{可能码字}
+        \begin{tabular}{cccccccc}
+            \hline
+            $c_0$ & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $c_7$ \\
+            000000 & 001110 & 010001 & 011111 & 100011 & 101101 & 110010 & 111100 \\
+            \hline
+        \end{tabular}
+    \end{table}
+    构造标准阵如下
+    \begin{table}[H]
+        \centering
+        \caption{标准阵}
+        \begin{tabular}{c|ccccccc}
+            \hline
+            陪集首 \\
+            000000 & 001110 & 010001 & 011111 & 100011 & 101101 & \textcolor{blue}{110010} & 111100 \\
+            \hline
+            000001 & 001111 & 010000 & 011110 & 100010 & 101100 & \textcolor{red}{110011} & 111101 \\
+            000010 & 001100 & 010011 & 011101 & 100011 & 101111 & 110000 & 111110 \\
+            000100 & 001010 & 010101 & 011011 & 100111 & 101001 & 110110 & 111000 \\
+            001000 & 000110 & 011001 & 010111 & 101011 & 100101 & 111010 & 110100 \\
+            100000 & 101110 & 110001 & 111111 & 000011 & 001101 & 010010 & 011100 \\
+            000101 & 001011 & 010100 & 011010 & 100110 & 101000 & 110111 & 111001 \\
+            001001 & 000111 & 011000 & 010110 & 101010 & 100100 & 111011 & 110101 \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \item 接受向量 $r = 110011$ 对应在标准阵中红色部分，故可直接译码为蓝色部分 $110010$。
+    % \item 先计算伴随式 $s = rH^\mathrm{T} = \begin{pmatrix}
+    %     1 & 1 & 0 & 0 & 1 & 1 \\
+    % \end{pmatrix} \cdot \begin{bmatrix}
+    %     0 & 1 & 1 \\
+    %     0 & 0 & 1 \\
+    %     1 & 1 & 0 \\
+    %     1 & 0 & 0 \\
+    %     0 & 1 & 0 \\
+    %     0 & 0 & 1 \\
+    % \end{bmatrix} = \begin{pmatrix}
+    %     0 & 0 & 1 \\
+    % \end{pmatrix}$
+\end{enumerate}
+
+\end{document}
